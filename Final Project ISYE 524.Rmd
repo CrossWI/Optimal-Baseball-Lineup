@@ -1,0 +1,320 @@
+---
+title: "Final Project ISYE 524"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE)
+library(tidyverse)
+library(lubridate)
+```
+
+```{r viridis-default, include=FALSE}
+## reset color defaults
+## Source https://data-se.netlify.com/2018/12/12/changing-the-default-color-scheme-in-ggplot2/
+library(viridis)
+library(scales)
+
+#### continuous variables color and fill
+options(ggplot2.continuous.colour = "viridis")
+options(ggplot2.continuous.fill = "viridis")
+
+#### use viridis for discrete scales
+scale_colour_discrete <- scale_colour_viridis_d
+scale_fill_discrete <- scale_fill_viridis_d
+
+## reset default theme
+##theme_set(theme_minimal())
+```
+
+## R Markdown
+
+```{r}
+ARI = read.csv("arizona_diamondbacks.csv")
+ATL = read.csv("atlanta_braves.csv")
+BAL = read.csv("baltimore_orioles.csv")
+BOS = read.csv("boston_redsox.csv")
+CHC = read.csv("chicago_cubs.csv")
+CHW = read.csv("chicago_whitesox.csv")
+CIN = read.csv("cincinnati_reds.csv")
+CLE = read.csv("cleveland_indians.csv")
+COL = read.csv("colorodo_rockies.csv")
+DET = read.csv("detroit_tigers.csv")
+HOU = read.csv("houston_astros.csv")
+KCR = read.csv("kansascity_royals.csv")
+LAA = read.csv("losangeles_angels.csv")
+LAD = read.csv("losangeles_dodgers.csv")
+MIA = read.csv("miami_marlins.csv")
+MIL = read.csv("milwaukee_brewers.csv")
+MIN = read.csv("minnesota_twins.csv")
+NYM = read.csv("newyork_mets.csv")
+NYY = read.csv("newyork_yankees.csv")
+OAK = read.csv("oakland_athletics.csv")
+PHI = read.csv("philadelphia_phillies.csv")
+PIT = read.csv("pittsburg_pirates.csv")
+SDP = read.csv("sandiago_padres.csv")
+SEA = read.csv("seattle_mariners.csv")
+SFG = read.csv("sanfrancisco_giants.csv")
+STL = read.csv("stlouis_cardinals.csv")
+TBR = read.csv("tampabay_rays.csv")
+TEX = read.csv("texas_rangers.csv")
+TOR = read.csv("toronto_bluejays.csv")
+WSN = read.csv("washington_nationals.csv")
+```
+
+``` {r}
+ARI = ARI %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.94 * 0.126))) / (9721/86575) * 100)
+
+ATL = ATL %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.84 * 0.126))) / (9721/86575) * 100)
+
+BAL = BAL %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.13 * 0.126))) / (11891/92956) * 100)
+
+BOS = BOS %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.02 * 0.126))) / (11891/92956) * 100)
+
+CHC = CHC %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.15 * 0.126))) / (9721/86575) * 100)
+
+CHW = CHW %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.06 * 0.126))) / (11891/92956) * 100)
+
+CIN = CIN %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.15 * 0.126))) / (9721/86575) * 100)
+
+CLE = CLE %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.97 * 0.126))) / (11891/92956) * 100)
+
+COL = COL %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.22 * 0.126))) / (9721/86575) * 100)
+
+DET = DET %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.02 * 0.126))) / (11891/92956) * 100)
+
+HOU = HOU %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.04 * 0.126))) / (11891/92956) * 100)
+
+KCR = KCR %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.83 * 0.126))) / (11891/92956) * 100)
+
+LAA = LAA %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.07 * 0.126))) / (11891/92956) * 100)
+
+LAD = LAD %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.98 * 0.126))) / (9721/86575) * 100)
+
+MIA = MIA %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.71 * 0.126))) / (9721/86575) * 100)
+
+MIL = MIL %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.08 * 0.126))) / (9721/86575) * 100)
+
+MIN = MIN %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.05 * 0.126))) / (11891/92956) * 100)
+
+NYM = NYM %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.94 * 0.126))) / (9721/86575) * 100)
+
+NYY = NYY %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.21 * 0.126))) / (11891/92956) * 100)
+
+OAK = OAK %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.85 * 0.126))) / (11891/92956) * 100)
+
+PHI = PHI %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.29 * 0.126))) / (9721/86575) * 100)
+
+PIT = PIT %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.76 * 0.126))) / (9721/86575) * 100)
+
+SDP = SDP %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.83 * 0.126))) / (9721/86575) * 100)
+
+SEA = SEA %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.96 * 0.126))) / (11891/92956) * 100)
+
+SFG = SFG %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.73 * 0.126))) / (9721/86575) * 100)
+
+STL = STL %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.00 * 0.126))) / (9721/86575) * 100)
+
+TBR = TBR %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (0.88 * 0.126))) / (11891/92956) * 100)
+
+TEX = TEX %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.06 * 0.126))) / (11891/92956) * 100)
+
+TOR = TOR %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.10 * 0.126))) / (9721/86575) * 100)
+
+WSN = WSN %>%
+  mutate(wOBA = (0.690*BB + 0.719*HBP + 0.850*(H - X2B - X3B - HR)+ 1.217*X2B + 1.529*X3B + 1.940*HR) / (AB + BB - IBB + SF + HBP)) %>% 
+  mutate(wRC = ((((wOBA - .320) / 1.157) + 0.126) + (0.126 - (1.06 * 0.126))) / (9721/86575) * 100)
+```
+
+``` {r}
+ARI2 = ARI %>%
+  filter(PA >= 200)
+
+ATL2 = ATL %>%
+  filter(PA >= 200)
+
+BAL2 = BAL %>%
+  filter(PA >= 200)
+
+BOS2 = BOS %>%
+  filter(PA >= 200)
+
+CHC2 = CHC %>%
+  filter(PA >= 200)
+
+CHW2 = CHW %>%
+  filter(PA >= 200)
+
+CIN2 = CIN %>%
+  filter(PA >= 200)
+
+CLE2 = CLE %>%
+  filter(PA >= 200)
+
+COL2 = COL %>%
+  filter(PA >= 200)
+
+DET2 = DET %>%
+  filter(PA >= 200)
+
+HOU2 = HOU %>%
+  filter(PA >= 200)
+
+KCR2 = KCR %>%
+  filter(PA >= 200)
+
+LAA2 = LAA %>%
+  filter(PA >= 200)
+
+LAD2 = LAD %>%
+  filter(PA >= 200)
+
+MIA2 = MIA %>%
+  filter(PA >= 200)
+
+MIL2 = MIL %>%
+  filter(PA >= 200)
+
+MIN2 = MIN %>%
+  filter(PA >= 200)
+
+NYM2 = NYM %>%
+  filter(PA >= 200)
+
+NYY2 = NYY %>%
+  filter(PA >= 200)
+
+OAK2 = OAK %>%
+  filter(PA >= 200)
+
+PHI2 = PHI %>%
+  filter(PA >= 200)
+
+PIT2 = PIT %>%
+  filter(PA >= 200)
+
+SDP2 = SDP %>%
+  filter(PA >= 200)
+
+SEA2 = SEA %>%
+  filter(PA >= 200)
+
+SFG2 = SFG %>%
+  filter(PA >= 200)
+
+STL2 = STL %>%
+  filter(PA >= 200)
+
+TBR2 = TBR %>%
+  filter(PA >= 200)
+
+TEX2 = TEX %>%
+  filter(PA >= 200)
+
+TOR2 = TOR %>%
+  filter(PA >= 200)
+
+WSN2 = WSN %>%
+  filter(PA >= 200)
+```
+
+``` {r}
+MLB <- rbind(ARI2,ATL2,BAL2,BOS2,CHC2,CHW2,CIN2,CLE2,COL2,DET2,HOU2,KCR2,LAA2,LAD2,MIA2,MIL2,MIN2,NYM2,NYY2,OAK2,PHI2,PIT2,SDP2,SEA2,SFG2,STL2,TBR2,TEX2,TOR2,WSN2)
+
+MLB[1] = 1:356
+MLB$Name <- as.character(MLB$Name)
+MLB[128,3] = "Yordan Alvarez"
+MLB$Name <- as.factor(MLB$Name)
+```
+
+``` {r}
+write.csv(ARI2,"arizona_diamondbacks.csv", row.names = FALSE)
+write.csv(ATL2,"atlanta_braves.csv", row.names = FALSE)
+write.csv(BAL2,"baltimore_orioles.csv", row.names = FALSE)
+write.csv(BOS2,"boston_redsox.csv", row.names = FALSE)
+write.csv(CHC2,"chicago_cubs.csv", row.names = FALSE)
+write.csv(CHW2,"chicago_whitesox.csv", row.names = FALSE)
+write.csv(CIN2,"cincinnati_reds.csv", row.names = FALSE)
+write.csv(CLE2,"cleveland_indians.csv", row.names = FALSE)
+write.csv(COL2,"colorodo_rockies.csv", row.names = FALSE)
+write.csv(DET2,"detroit_tigers.csv", row.names = FALSE)
+write.csv(HOU2,"houston_astros.csv", row.names = FALSE)
+write.csv(KCR2,"kansascity_royals.csv", row.names = FALSE)
+write.csv(LAA2,"losangeles_angels.csv", row.names = FALSE)
+write.csv(LAD2,"losangeles_dodgers.csv", row.names = FALSE)
+write.csv(MIA2,"miami_marlins.csv", row.names = FALSE)
+write.csv(MIL2,"milwaukee_brewers.csv", row.names = FALSE)
+write.csv(MIN2,"minnesota_twins.csv", row.names = FALSE)
+write.csv(NYM2,"newyork_mets.csv", row.names = FALSE)
+write.csv(NYY2,"newyork_yankees.csv", row.names = FALSE)
+write.csv(OAK2,"oakland_athletics.csv", row.names = FALSE)
+write.csv(PHI2,"philadelphia_phillies.csv", row.names = FALSE)
+write.csv(PIT2,"pittsburg_pirates.csv", row.names = FALSE)
+write.csv(SDP2,"sandiago_padres.csv", row.names = FALSE)
+write.csv(SEA2,"seattle_mariners.csv", row.names = FALSE)
+write.csv(SFG2,"sanfrancisco_giants.csv", row.names = FALSE)
+write.csv(STL2,"stlouis_cardinals.csv", row.names = FALSE)
+write.csv(TBR2,"tampabay_rays.csv", row.names = FALSE)
+write.csv(TEX2,"texas_rangers.csv", row.names = FALSE)
+write.csv(TOR2,"toronto_bluejays.csv", row.names = FALSE)
+write.csv(WSN2,"washington_nationals.csv", row.names = FALSE)
+write.csv(MLB,"mlb.csv", row.names = FALSE)
+```
